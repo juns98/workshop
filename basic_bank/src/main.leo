@@ -82,6 +82,7 @@ program basic_bank.aleo {
     // - `principal`: The amount of tokens to compound interest over.
     // - `rate`     : The compound interest rate.
     // - `periods`  : The number of periods to compound the interest over.
+    // helper 함수 
     function calculate_interest(principal: u64, rate: u64, periods: u64) -> u64 {
         let amount: u64 = principal;
 

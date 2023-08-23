@@ -1,0 +1,9 @@
+// The program input for basic_swap/src/main.leo
+[create_token]
+info: TokenInfo = TokenInfo {
+    name: 1234field,
+    symbol: 1234field,
+    decimals: 5u8,
+    total_supply: 10000000000u128,
+    admin: aleo15hlrfuy206c0fc7zfaj7p6h2lpe655y586ys4dcasdx7yx7j2srsdvr8zv,
+};
