@@ -13,7 +13,7 @@ amount: u64 = 50u64;
 
 [transfer_private]
 sender: token = token {
-    owner: aleo1pvmhrzm5tevxg7rrj65z6txpvm9stfgex05v4lfs05677n7e0cxqdk46jr,
+    owner: aleo15hlrfuy206c0fc7zfaj7p6h2lpe655y586ys4dcasdx7yx7j2srsdvr8zv,
     amount: 100u64,
     _nonce: 0group,
 };
@@ -22,7 +22,7 @@ amount: u64 = 50u64;
 
 [transfer_private_to_public]
 sender: token = token {
-    owner: aleo1pvmhrzm5tevxg7rrj65z6txpvm9stfgex05v4lfs05677n7e0cxqdk46jr,
+    owner: aleo15hlrfuy206c0fc7zfaj7p6h2lpe655y586ys4dcasdx7yx7j2srsdvr8zv,
     amount: 100u64,
     _nonce: 0group,
 };

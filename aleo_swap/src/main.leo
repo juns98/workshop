@@ -87,7 +87,7 @@ program aleo_swap.aleo {
         is_pending: bool,
     }
 
-    // ========================= token =========================
+    // ========================= token ========================= //
 
     // Create a new token. --> on chain에 기록이 된다
     transition create_token(public info: TokenInfo) {
@@ -95,7 +95,6 @@ program aleo_swap.aleo {
         // assert(info.total_supply <= 18446744073709551615u128);
         return then finalize(info, self.caller);
     }
-
     finalize create_token(public info: TokenInfo, public caller: address) {
         let gs: GlobalState = Mapping::get(global_state, true);
         let token_id: field = gs.next_token_id;
@@ -112,7 +111,6 @@ program aleo_swap.aleo {
     transition transfer(public token_id: field, public to: address, public amount: u128) {
         return then finalize(token_id, self.caller, to, amount);
     }
-
     finalize transfer(public token_id: field, public from: address, public to: address, public amount: u128) {
         // confirm token exists
         assert(Mapping::contains(tokens, token_id));
@@ -129,11 +127,11 @@ program aleo_swap.aleo {
     transition approve(public token_id: field, public spender: address, public amount: u128) {
         return then finalize(token_id, self.caller, spender, amount);
     }
-
     finalize approve(public token_id: field, public caller: address, public spender: address, public amount: u128) {
         // confirm token exists
         assert(Mapping::contains(tokens, token_id));
         let key: field = get_allowance_id(token_id, caller, spender);
+        // on chain 에서 setting
         Mapping::set(allowance, key, amount);
     }
 
@@ -144,9 +142,9 @@ program aleo_swap.aleo {
         public to: address,
         public amount: u128
      ) {
+        // private 하게 이루어지는 operation은 없음
         return then finalize(self.caller, token_id, from, to, amount);
     }
-
     finalize transfer_from(
         public caller: address,
         public token_id: field,
@@ -167,7 +165,6 @@ program aleo_swap.aleo {
     }
 
     // ========================= token advanced =========================
-
     // Configure the faucet amount of the token.
     // Only the token's admin can successfully perform this operation.
     transition set_token_faucet(public token_id: field, public amount: u128) {
@@ -175,8 +172,8 @@ program aleo_swap.aleo {
         assert(token_id != 0field);
         return then finalize(self.caller, token_id, amount);
     }
-
     finalize set_token_faucet(public caller: address, public token_id: field, public amount: u128) {
+        // 토큰 정보 가져옴
         let ti: TokenInfo = Mapping::get(tokens, token_id);
         // only admin
         assert_eq(caller, ti.admin);
@@ -185,10 +182,10 @@ program aleo_swap.aleo {
 
     // Change the token's admin address.
     // Only the token's admin can successfully perform this operation.
+    // public 함수
     transition change_token_admin(public token_id: field, public admin: address) {
         return then finalize(self.caller, token_id, admin);
     }
-
     finalize change_token_admin(public caller: address, public token_id: field, public admin: address) {
         let ti: TokenInfo = Mapping::get(tokens, token_id);
         // only admin
@@ -206,7 +203,6 @@ program aleo_swap.aleo {
     transition token_faucet(public token_id: field, public to: address) {
         return then finalize(token_id, to);
     }
-
     finalize token_faucet(public token_id: field, public to: address) {
         let amount: u128 = Mapping::get(faucets, token_id);
         assert(amount > 0u128);
@@ -225,7 +221,6 @@ program aleo_swap.aleo {
     }
 
     // ========================= WALEO =========================
-
     // Wrap private aleo credits into WALEO tokens.
     transition wrap_private_credits(
         private input: credits_new.leo/credits,
@@ -234,6 +229,7 @@ program aleo_swap.aleo {
         public holder: address
     ) -> (credits_new.leo/credits) {
         assert(amount > 0field && amount <= 18446744073709551615field);
+        // transfer_private_to_public 이 credits record를 리턴 -> private
         let aleo_change: credits = credits_new.leo/transfer_private_to_public(input, holder, amount as u64);
         return aleo_change then finalize(to, amount as u128, holder);
     }
@@ -331,7 +327,6 @@ program aleo_swap.aleo {
         let unwrapped: credits = credits_new.leo/transfer_public_to_private(to, amount as u64);
         return unwrapped then finalize(index, to, amount as u128);
     }
-
     finalize handle_unwrap_to_private(public index: u64, public to: address, public amount: u128) {
         // check params
         let ui: UnwrapItem = Mapping::get(unwraps, index);
@@ -1257,9 +1252,7 @@ program aleo_swap.aleo {
         // output token has been transferred privately
     }
 
-
     // ========================= inline =========================
-
     // Build a key of the mapping `balances`
     inline get_balance_id(token_: field, user_: address) -> field {
         // copy to avoid compiling error
